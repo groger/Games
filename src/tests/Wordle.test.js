@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import Wordle from './Wordle';
+import Wordle from '../components/Wordle';
 
 describe('Wordle component', () => {
    it('should render the Wordle component', () => {
