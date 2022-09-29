@@ -75,19 +75,9 @@ export default function Wordle() {
       };
     }
 
-    const newGuessWords = [...guessWords, input];
-    setGuessWords(newGuessWords);
-
     const newNbGuess = nbGuess + 1;
-    setNbGuess(newNbGuess);
-
-    let isNewGameOver = isGameOver;
-    let isNewWinner = input.toLowerCase() === wordToGuess.toLowerCase();
-    if (newNbGuess >= maxGuesses || isNewWinner) {
-      setIsGameOver(true);
-      isNewGameOver = true;
-    }
-    setIsWinner(isNewWinner);
+    const isNewWinner = input.toLowerCase() === wordToGuess.toLowerCase();
+    const newGuessWords = [...guessWords, input];
 
     let newBoardStatus = boardStatus;
     if (newGuessWords.length === 0) {
@@ -99,17 +89,24 @@ export default function Wordle() {
     } else {
       newBoardStatus =  boardStatusOptions[3];
     }
-    setBoardStatus(newBoardStatus);
 
     return {
       nbGuess: newNbGuess,
       boardStatus: newBoardStatus,
-      isGameover: isNewGameOver,
+      isGameOver: newNbGuess >= maxGuesses || isNewWinner,
       isWinner: isNewWinner,
       guessWords: newGuessWords,
       wordToGuess,
     };
   };
+
+  const setGameState = (gameState) => {
+    setNbGuess(gameState.nbGuess);
+    setBoardStatus(gameState.boardStatus);
+    setIsGameOver(gameState.isGameOver);
+    setIsWinner(gameState.isWinner);
+    setGuessWords(gameState.guessWords);
+  }
 
   //Question 3
   const isGameComplete = (gameState) => {
@@ -118,7 +115,8 @@ export default function Wordle() {
 
   const onSubmit = () => {
     const newInput = inputRef.current.value;
-    getGameState(newInput);
+    const newGameState = getGameState(newInput);
+    setGameState(newGameState);
   };
 
   return (
